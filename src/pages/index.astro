@@ -1,0 +1,69 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import { getCollection } from "astro:content";
+import FormattedDate from "../components/FormattedDate.astro";
+import { Flamethrower } from "astro-flamethrower";
+
+const posts = (await getCollection("b")).sort((a, b) => {
+	let date_cmp = b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
+	if (date_cmp != 0) {
+		return date_cmp;
+	} else {
+		return a.data.title.localeCompare(b.data.title);
+	}
+});
+---
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<style>
+			ul {
+				list-style-type: none;
+				padding: unset;
+			}
+			ul li {
+				display: flex;
+				justify-content: space-between;
+				gap: 1rem;
+			}
+			ul li a {
+    			font-weight: 900;
+			}
+			ul li a span:first-child {
+    			color: #666;
+			}
+			ul li a span:last-child:hover {
+			    text-decoration: underline;
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<section style="text-align: justify">
+		Hi, I am a problem-causer/problem-solver from <a href="https://braiins.cz">Braiins Systems s.r.o</a>.
+		Also in the know with the <a href="https://testausserveri.fi">Finns</a>.
+		I like solving problems in the most contrived hipster ways possible.
+		Because it's fun, and you should have fun in IT.
+		</section>
+		<h3>Articles</h3>
+		<main>
+			<section>
+				<ul>
+					{
+						posts.map((post) => (
+							<li>
+								<a href={`/b/${post.slug}/`}><span>{post.data.category}</span> <span>{post.data.title}</span></a>
+    							<FormattedDate date={post.data.pubDate}/>
+							</li>
+						))
+					}
+				</ul>
+			</section>
+		</main>
+		<Flamethrower color="#00ff00" />
+	</body>
+</html>

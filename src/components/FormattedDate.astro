@@ -1,0 +1,23 @@
+---
+const { date } = Astro.props;
+---
+
+<div class="padded-cell">
+<time datetime={date.toISOString()}>
+</time>
+<style>
+	time {
+		color: #000;
+	}
+	div.padded-cell {
+		margin-bottom: 1em;
+	}
+</style>
+	{
+		date.toLocaleDateString('en-us', {
+			year: 'numeric',
+			month: 'short',
+			day: 'numeric',
+		})
+	}
+</div>
